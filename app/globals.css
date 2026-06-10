@@ -1,26 +1,213 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 210 20% 98%;
+    --foreground: 210 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 30% 15%;
+
+    --primary: 195 80% 30%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 195 30% 94%;
+    --secondary-foreground: 195 80% 25%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 210 15% 50%;
+
+    --accent: 195 60% 92%;
+    --accent-foreground: 195 80% 25%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* KPI widget tints */
+    --kpi-blue: 210 90% 54%;
+    --kpi-blue-bg: 210 100% 96%;
+    --kpi-orange: 25 95% 53%;
+    --kpi-orange-bg: 30 100% 95%;
+    --kpi-green: 142 71% 40%;
+    --kpi-green-bg: 142 60% 95%;
+    --kpi-purple: 270 70% 55%;
+    --kpi-purple-bg: 270 80% 96%;
+
+    /* Pillar palette */
+    --pillar-1: 195 80% 35%;
+    --pillar-2: 25 90% 50%;
+    --pillar-3: 270 65% 55%;
+    --pillar-4: 142 60% 42%;
+    --pillar-5: 340 75% 52%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 195 80% 30%;
+
+    --radius: 0.5rem;
+
+    --nav-bg: 195 80% 22%;
+    --nav-foreground: 0 0% 100%;
+    --nav-active: 195 90% 40%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 210 30% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 210 30% 12%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 210 30% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 195 80% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 18%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 210 25% 18%;
+    --muted-foreground: 210 15% 60%;
+
+    --accent: 210 30% 20%;
+    --accent-foreground: 210 20% 90%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 25% 20%;
+    --input: 210 25% 20%;
+    --ring: 195 80% 45%;
+
+    --nav-bg: 210 30% 10%;
+    --nav-foreground: 0 0% 95%;
+    --nav-active: 195 80% 45%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+
+    overflow: hidden;
+
+    -webkit-tap-highlight-color: transparent;
+
+    backface-visibility: hidden;
+    transform: translateZ(0);
+
+    will-change: auto;
+  }
+
+  #root {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+
+    isolation: isolate;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition:
+      background-color 150ms ease-out,
+      border-color 150ms ease-out,
+      color 150ms ease-out,
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* GLOBAL SMOOTHNESS */
+
+@layer utilities {
+  .gpu-render {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+
+  .smooth-transition {
+    transition:
+      all 150ms ease-out;
+  }
+
+  .smooth-width {
+    transition:
+      width 150ms ease-out,
+      min-width 150ms ease-out,
+      max-width 150ms ease-out;
+  }
+
+  .smooth-transform {
+    transition:
+      transform 150ms ease-out;
+  }
 }
