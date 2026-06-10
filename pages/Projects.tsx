@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import {
   ChevronDown,
@@ -21,7 +23,6 @@ import {
   projectData,
   PROGRESS_RANGES,
 } from "@/mocks/projects";
-import { useNavigate } from "react-router-dom";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -816,7 +817,7 @@ function AssignmentDialog({
 export default function Projects() {
   const { filterByPillar } = usePillarFilter();
   const visibleProjects = filterByPillar(projectData);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -992,7 +993,7 @@ export default function Projects() {
     showToast("Tasks submitted for approval");
 
     // Navigate to TaskReviewApproval page
-    navigate("/task-review-approval");
+    router.push("/task-review-approval");
   };
 
   return (

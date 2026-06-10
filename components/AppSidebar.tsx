@@ -1,5 +1,6 @@
+"use client";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 
 import {
   LayoutDashboard,
@@ -203,7 +204,7 @@ export function AppSidebar() {
 
   const collapsed = state === "collapsed";
 
-  const location = useLocation();
+  const pathname = usePathname();
 
   const { user } = useAuth();
 
@@ -220,31 +221,29 @@ export function AppSidebar() {
   const canSeeDemand = can("view_demand");
 
   const demandActive =
-    location.pathname.startsWith("/demand") ||
-    location.pathname.startsWith("/demand-status");
+    pathname.startsWith("/demand") || pathname.startsWith("/demand-status");
 
   const [demandOpen, setDemandOpen] = useState(demandActive);
 
   const projectActive =
-    location.pathname.startsWith("/projects") ||
-    location.pathname.startsWith("/task-review-approval");
+    pathname.startsWith("/projects") ||
+    pathname.startsWith("/task-review-approval");
 
   const [projectOpen, setProjectOpen] = useState(projectActive);
 
   const portfolioActive =
-    location.pathname.startsWith("/project-portfolio") ||
-    location.pathname.startsWith("/scenario-planning");
+    pathname.startsWith("/project-portfolio") ||
+    pathname.startsWith("/scenario-planning");
 
   const [portfolioOpen, setPortfolioOpen] = useState(portfolioActive);
 
   const dashboardActive =
-    location.pathname === "/" || location.pathname.startsWith("/my-dashboard");
+    pathname === "/" || pathname.startsWith("/my-dashboard");
 
   const [dashboardOpen, setDashboardOpen] = useState(dashboardActive);
 
   const adminActive =
-    location.pathname.startsWith("/user-management") ||
-    location.pathname.startsWith("/admin/");
+    pathname.startsWith("/user-management") || pathname.startsWith("/admin/");
 
   const [adminOpen, setAdminOpen] = useState(adminActive);
 
@@ -268,7 +267,7 @@ export function AppSidebar() {
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild tooltip={item.title}>
             <NavLink
-              to={item.url}
+              href={item.url}
               end={item.end}
               className={`${linkBase} ${linkInactive}`}
               activeClassName={linkActive}
@@ -302,7 +301,7 @@ export function AppSidebar() {
           </TooltipTrigger>
 
           <TooltipContent side="right" className="text-xs">
-            You don't have access to {item.title}
+            You don&apos;t have access to {item.title}
           </TooltipContent>
         </Tooltip>
       </SidebarMenuItem>
@@ -317,7 +316,7 @@ export function AppSidebar() {
         <SidebarMenuSubItem key={sub.title}>
           <SidebarMenuSubButton asChild>
             <NavLink
-              to={sub.url}
+              href={sub.url}
               end={sub.end}
               className={`${linkBase} ${linkInactive}`}
               activeClassName={linkActive}
@@ -347,7 +346,7 @@ export function AppSidebar() {
           </TooltipTrigger>
 
           <TooltipContent side="right" className="text-xs">
-            You don't have access to {sub.title}
+            You don&apos;t have access to {sub.title}
           </TooltipContent>
         </Tooltip>
       </SidebarMenuSubItem>
@@ -362,7 +361,7 @@ export function AppSidebar() {
         <SidebarMenuSubItem key={sub.title}>
           <SidebarMenuSubButton asChild>
             <NavLink
-              to={sub.url}
+              href={sub.url}
               end={sub.end}
               className={`${linkBase} ${linkInactive}`}
               activeClassName={linkActive}
@@ -391,7 +390,7 @@ export function AppSidebar() {
           </TooltipTrigger>
 
           <TooltipContent side="right" className="text-xs">
-            You don't have access to {sub.title}
+            You don&apos;t have access to {sub.title}
           </TooltipContent>
         </Tooltip>
       </SidebarMenuSubItem>
@@ -520,7 +519,7 @@ export function AppSidebar() {
                     </TooltipTrigger>
 
                     <TooltipContent side="right" className="text-xs">
-                      You don't have access to Dashboard
+                      You don&apos;t have access to Dashboard
                     </TooltipContent>
                   </Tooltip>
                 </SidebarMenuItem>
@@ -584,7 +583,7 @@ export function AppSidebar() {
                     </TooltipTrigger>
 
                     <TooltipContent side="right" className="text-xs">
-                      You don't have access to Demand Management
+                      You don&apos;t have access to Demand Management
                     </TooltipContent>
                   </Tooltip>
                 </SidebarMenuItem>
@@ -649,7 +648,7 @@ export function AppSidebar() {
                     </TooltipTrigger>
 
                     <TooltipContent side="right" className="text-xs">
-                      You don't have access to Projects
+                      You don&apos;t have access to Projects
                     </TooltipContent>
                   </Tooltip>
                 </SidebarMenuItem>
@@ -710,7 +709,7 @@ export function AppSidebar() {
                     </TooltipTrigger>
 
                     <TooltipContent side="right" className="text-xs">
-                      You don't have access to Portfolio Planning
+                      You don&apos;t have access to Portfolio Planning
                     </TooltipContent>
                   </Tooltip>
                 </SidebarMenuItem>
@@ -772,7 +771,7 @@ export function AppSidebar() {
                     </TooltipTrigger>
 
                     <TooltipContent side="right" className="text-xs">
-                      You don't have access to Admin
+                      You don&apos;t have access to Admin
                     </TooltipContent>
                   </Tooltip>
                 </SidebarMenuItem>

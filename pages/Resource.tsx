@@ -1,9 +1,11 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+
 import {
   Select,
   SelectContent,
@@ -657,7 +659,7 @@ export function ResourceDialog({
   const [isSaving, setIsSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const role = userRole;
   const {
     updateDemand,
@@ -790,7 +792,7 @@ export function ResourceDialog({
       }
 
       handleClose();
-      navigate("/resource-review");
+      router.push("/resource-review");
     }, 800);
   };
 

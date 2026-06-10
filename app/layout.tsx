@@ -1,22 +1,22 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/auth/useAuth";
-import AppLayout from "@/components/AppLayout";
+import type { Metadata } from "next";
+import "./globals.css";
+import { Providers } from "./Providers";
 
-export default function ProtectedLayout({
+export const metadata: Metadata = {
+  title: "Enterprise Resource Management",
+  description: "Secure workforce planning and allocation platform",
+};
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated) router.replace("/login");
-  }, [isAuthenticated, router]);
-
-  if (!isAuthenticated) return null;
-
-  return <AppLayout>{children}</AppLayout>;
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }

@@ -1,7 +1,8 @@
+"use client";
 import { useState, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import {
-   CheckCircle2,
+  CheckCircle2,
   XCircle,
   Clock,
   Eye,
@@ -19,7 +20,6 @@ import {
   Filter,
 } from "lucide-react";
 import { TaskStatus, TaskRequest, MOCK_TASKS } from "../mocks/taskApproval";
-
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -426,13 +426,12 @@ function Toast({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TaskReviewApproval() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const initialTasks: TaskRequest[] = useMemo(() => {
-    const stateTasks = location.state?.submittedTasks ?? [];
+    const stateTasks: TaskRequest[] = []; // Note: In Next.js, pass submitted tasks via Zustand store instead of router state
     return [...stateTasks, ...MOCK_TASKS];
-  }, [location.state]);
+  }, []);
 
   const [tasks, setTasks] = useState<TaskRequest[]>(initialTasks);
   const [search, setSearch] = useState("");
@@ -534,82 +533,82 @@ export default function TaskReviewApproval() {
       )}
 
       <div className="shrink-0">
-      {/* ── Page Header ── */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-2">
-          <div>
-            <h2 className="text-lg font-semibold text-foreground tracking-tight">
-              Task Review
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Project Manager approval for submitted task assignments
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Workflow Bar ── */}
-      <div className="bg-card border border-border rounded-xl px-5 py-3">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2.5">
-          Approval Workflow
-        </p>
-        <div className="flex items-center">
-          {/* Step 1 */}
+        {/* ── Page Header ── */}
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-            </div>
             <div>
-              <p className="text-xs font-bold text-blue-700 dark:text-blue-400 leading-tight">
-                Submitted
-              </p>
-              <p className="text-xs text-muted-foreground leading-tight">
-                Task assigned
-              </p>
-            </div>
-          </div>
-
-          <div className="flex-1 mx-3 flex items-center gap-1 min-w-0">
-            <div className="flex-1 h-px bg-border" />
-            <ChevronRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-          </div>
-
-          {/* Step 2 */}
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
-              <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-amber-700 dark:text-amber-400 leading-tight">
-                Pending PM Approval
-              </p>
-              <p className="text-xs text-muted-foreground leading-tight">
-                Awaiting review
-              </p>
-            </div>
-          </div>
-
-          <div className="flex-1 mx-3 flex items-center gap-1 min-w-0">
-            <div className="flex-1 h-px bg-border" />
-            <ChevronRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-          </div>
-
-          {/* Step 3 */}
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center flex-shrink-0">
-              <CheckCircle2 className="w-3 h-3 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-green-700 dark:text-green-400 leading-tight">
-                Approved
-              </p>
-              <p className="text-xs text-muted-foreground leading-tight">
-                Ready to start
+              <h2 className="text-lg font-semibold text-foreground tracking-tight">
+                Task Review
+              </h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Project Manager approval for submitted task assignments
               </p>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* ── Workflow Bar ── */}
+        <div className="bg-card border border-border rounded-xl px-5 py-3">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2.5">
+            Approval Workflow
+          </p>
+          <div className="flex items-center">
+            {/* Step 1 */}
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+                <FileText className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-blue-700 dark:text-blue-400 leading-tight">
+                  Submitted
+                </p>
+                <p className="text-xs text-muted-foreground leading-tight">
+                  Task assigned
+                </p>
+              </div>
+            </div>
+
+            <div className="flex-1 mx-3 flex items-center gap-1 min-w-0">
+              <div className="flex-1 h-px bg-border" />
+              <ChevronRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
+                <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-amber-700 dark:text-amber-400 leading-tight">
+                  Pending PM Approval
+                </p>
+                <p className="text-xs text-muted-foreground leading-tight">
+                  Awaiting review
+                </p>
+              </div>
+            </div>
+
+            <div className="flex-1 mx-3 flex items-center gap-1 min-w-0">
+              <div className="flex-1 h-px bg-border" />
+              <ChevronRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-green-500/15 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="w-3 h-3 text-green-600 dark:text-green-400" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-green-700 dark:text-green-400 leading-tight">
+                  Approved
+                </p>
+                <p className="text-xs text-muted-foreground leading-tight">
+                  Ready to start
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── KPI Cards ── */}
@@ -770,27 +769,27 @@ export default function TaskReviewApproval() {
             style={{ tableLayout: "fixed", minWidth: "960px" }}
           >
             <colgroup>
-  <col style={{ width: "160px" }} />
-  <col style={{ width: "155px" }} />
-  <col style={{ width: "100px" }} />
-  <col style={{ width: "150px" }} />
-  <col style={{ width: "120px" }} />
-  <col style={{ width: "140px" }} />
-  <col style={{ width: "100px" }} />
-  <col style={{ width: "155px" }} />
-</colgroup>
+              <col style={{ width: "160px" }} />
+              <col style={{ width: "155px" }} />
+              <col style={{ width: "100px" }} />
+              <col style={{ width: "150px" }} />
+              <col style={{ width: "120px" }} />
+              <col style={{ width: "140px" }} />
+              <col style={{ width: "100px" }} />
+              <col style={{ width: "155px" }} />
+            </colgroup>
             <thead className="sticky top-0 z-20 bg-muted/40">
               <tr className="border-b border-border bg-muted/40">
                 {[
-  "Task",
-  "Project",
-  "Task Type",
-  "Assigned To",
-  "Date Submitted",
-  "Allocation",
-  "Status",
-  "Actions",
-].map((col) => (
+                  "Task",
+                  "Project",
+                  "Task Type",
+                  "Assigned To",
+                  "Date Submitted",
+                  "Allocation",
+                  "Status",
+                  "Actions",
+                ].map((col) => (
                   <th
                     key={col}
                     className="sticky top-0 z-20 bg-muted/40 text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground tracking-wider whitespace-nowrap"
@@ -863,11 +862,11 @@ export default function TaskReviewApproval() {
                     </td>
 
                     {/* Date Submitted */}
-<td className="px-3 py-2.5">
-  <span className="text-xs text-muted-foreground whitespace-nowrap">
-    {task.submittedDate}
-  </span>
-</td>
+                    <td className="px-3 py-2.5">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">
+                        {task.submittedDate}
+                      </span>
+                    </td>
 
                     {/* Allocation */}
                     <td className="px-3 py-2.5">

@@ -1,5 +1,7 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { useAuth } from "@/auth/useAuth";
 import { useStore } from "@/store/useStore";
 import { projectData } from "@/mocks/projects";
@@ -448,7 +450,7 @@ function ScenarioModal({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ScenarioPlanning() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useAuth();
   const { addPortfolioProject } = useStore();
   const isReadOnly = user?.role === "resource";
@@ -561,9 +563,9 @@ export default function ScenarioPlanning() {
         })),
     });
 
-    navigate("/project-portfolio", {
-      state: { sendForApproval, projectId: selectedProject },
-    });
+    router.push(
+      `/project-portfolio?sendForApproval=${sendForApproval}&projectId=${selectedProject}`,
+    );
   }
 
   return (

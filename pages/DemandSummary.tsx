@@ -1,5 +1,6 @@
+"use client";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import { useAuth } from "@/auth/useAuth";
 import { hasPermission } from "@/auth/rbac";
@@ -173,28 +174,31 @@ function mapRowToDemand(
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function DemandSummary() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   // ── CHANGE 1: read ?allocate=<id> query param ─────────────────────────────
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const { demands, addDemands, deleteDemand } = useStore();
 
   // ── Navigate-in from Project Portfolio ──────────────────────────────────────
+  // Note: In Next.js, router state is passed via URL search params.
+  // ProjectPortfolio now navigates to /demand?fromPortfolio=1&projectNames=...
   useEffect(() => {
-    const state = location.state as {
-      fromPortfolio?: boolean;
-      projectNames?: string[];
-    } | null;
-    if (state?.fromPortfolio && state.projectNames?.length) {
-      const names = state.projectNames.join(", ");
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const fromPortfolio = params.get("fromPortfolio");
+    const projectNamesParam = params.get("projectNames");
+    if (fromPortfolio && projectNamesParam) {
+      const names = decodeURIComponent(projectNamesParam);
+      const count = names.split(",").length;
       toast.success(
-        `${state.projectNames.length} demand${state.projectNames.length > 1 ? "s" : ""} created with status Pending`,
+        `${count} demand${count > 1 ? "s" : ""} created with status Pending`,
         { description: names },
       );
-      // Clear state so re-visits don't re-toast
-      window.history.replaceState({}, "");
+      // Clear search params so re-visits don't re-toast
+      window.history.replaceState({}, "", window.location.pathname);
     }
-  }, [location.state]);
+  }, []);
   const { filterByPillar } = usePillarFilter();
   const visibleDemands = filterByPillar(demands);
   const { user } = useAuth();
@@ -555,7 +559,7 @@ export default function DemandSummary() {
             variant="ghost"
             size="sm"
             className="h-7 w-7 p-0"
-            onClick={() => navigate(`/demand/create?id=${row.id}`)}
+            onClick={() => router.push(`/demand/create?id=${row.id}`)}
             title={canEditDelete ? "Edit" : "You don't have permission to edit"}
             disabled={!canEditDelete}
           >
@@ -597,7 +601,7 @@ export default function DemandSummary() {
             <Button
               size="sm"
               className="h-9 gap-1.5"
-              onClick={() => navigate("/demand/create")}
+              onClick={() => router.push("/demand/create")}
             >
               <Plus className="h-3.5 w-3.5" />
               New Demand

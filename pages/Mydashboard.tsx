@@ -1,5 +1,6 @@
+"use client";
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
   Star,
@@ -283,7 +284,7 @@ function DashboardCardItem({
   onStar,
   onDelete,
   onOpen,
-  onDuplicate
+  onDuplicate,
 }: {
   card: DashboardCard;
   onStar: (id: string) => void;
@@ -518,37 +519,41 @@ function DashboardCardItem({
                     // Default View must never be deleted
                     hidden: isDefaultView,
                   },
-                ].filter((item) => !item.hidden).map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={item.action}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 9,
-                      width: "100%",
-                      padding: "8px 14px",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      fontSize: 12,
-                      fontWeight: 500,
-                      color: (item as any).danger ? "#ef4444" : T.text,
-                      textAlign: "left",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.background =
-                        T.inputBg;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.background =
-                        "none";
-                    }}
-                  >
-                    <item.icon size={13} />
-                    {item.label}
-                  </button>
-                ))}
+                ]
+                  .filter((item) => !item.hidden)
+                  .map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={item.action}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 9,
+                        width: "100%",
+                        padding: "8px 14px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        color: (item as any).danger ? "#ef4444" : T.text,
+                        textAlign: "left",
+                      }}
+                      onMouseEnter={(e) => {
+                        (
+                          e.currentTarget as HTMLButtonElement
+                        ).style.background = T.inputBg;
+                      }}
+                      onMouseLeave={(e) => {
+                        (
+                          e.currentTarget as HTMLButtonElement
+                        ).style.background = "none";
+                      }}
+                    >
+                      <item.icon size={13} />
+                      {item.label}
+                    </button>
+                  ))}
               </div>
             )}
           </div>
@@ -772,8 +777,8 @@ function FilterDropdown({
 export default function Mydashboard() {
   // useDark() only triggers re-renders when theme changes.
   const dark = useDark();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
 
   // ─── Load cards from both seed data and DashboardService ────────────────
@@ -825,7 +830,12 @@ export default function Mydashboard() {
 
   // Detect navigation from Dashboard save flow
   useEffect(() => {
-    const state = location.state as { fromSave?: boolean; dashboardId?: string; dashboardName?: string } | null;
+    const fromSave = searchParams.get("fromSave");
+    const dashboardId = searchParams.get("dashboardId");
+    const dashboardName = searchParams.get("dashboardName");
+    const state = fromSave
+      ? { fromSave: true, dashboardId, dashboardName }
+      : null;
     if (state?.fromSave) {
       setSavedBanner(true);
       setSavedDashName(state.dashboardName ?? "");
@@ -864,7 +874,7 @@ export default function Mydashboard() {
     // For the Default View card, navigate with the special DEFAULT_VIEW_ID
     // so Dashboard resets to its system baseline.
     if (id === DEFAULT_VIEW_CARD_ID) {
-      navigate("/", { state: { viewId: "default" } });
+      router.push("/?viewId=default");
       return;
     }
     // Mark this dashboard as active so it loads its config
@@ -872,11 +882,12 @@ export default function Mydashboard() {
       // Deactivate others for same user, activate this one
       const saved = DashboardService.getForUser(user.id);
       saved.forEach((d) => {
-        if (d.id !== id && d.isActive) DashboardService.update(d.id, { isActive: false });
+        if (d.id !== id && d.isActive)
+          DashboardService.update(d.id, { isActive: false });
       });
       DashboardService.update(id, { isActive: true });
     }
-    navigate("/", { state: { viewId: id } });
+    router.push(`/?viewId=${id}`);
   };
 
   const handleDuplicate = (id: string) => {
@@ -894,8 +905,14 @@ export default function Mydashboard() {
       const savedDash = DashboardService.getById(id);
       if (savedDash) {
         const dup = DashboardService.save(
-          user.id, user.username, savedDash.persona, savedDash.role,
-          copyName, savedDash.widgetConfig, savedDash.kpiConfig, savedDash.filterConfig
+          user.id,
+          user.username,
+          savedDash.persona,
+          savedDash.role,
+          copyName,
+          savedDash.widgetConfig,
+          savedDash.kpiConfig,
+          savedDash.filterConfig,
         );
         setCards(buildCards());
         showNotification(`"${dup.name}" created`);
@@ -928,16 +945,24 @@ export default function Mydashboard() {
   const submitRename = () => {
     if (!renameId) return;
     const trimmed = renameName.trim();
-    if (!trimmed) { setRenameError("Name cannot be blank."); return; }
+    if (!trimmed) {
+      setRenameError("Name cannot be blank.");
+      return;
+    }
     if (trimmed.toLowerCase() === "default view") {
-      setRenameError("\"Default View\" is reserved. Please choose a different name.");
+      setRenameError(
+        '"Default View" is reserved. Please choose a different name.',
+      );
       return;
     }
     if (user && DashboardService.nameExists(user.id, trimmed, renameId)) {
-      setRenameError(`"${trimmed}" already exists.`); return;
+      setRenameError(`"${trimmed}" already exists.`);
+      return;
     }
     if (user) DashboardService.rename(renameId, trimmed);
-    setCards((prev) => prev.map((c) => c.id === renameId ? { ...c, name: trimmed } : c));
+    setCards((prev) =>
+      prev.map((c) => (c.id === renameId ? { ...c, name: trimmed } : c)),
+    );
     showNotification(`Renamed to "${trimmed}"`);
     setRenameId(null);
   };
@@ -1019,17 +1044,37 @@ export default function Mydashboard() {
             }}
           >
             <CheckCircle size={16} color="#10b981" />
-            Dashboard configuration saved successfully. Your widgets and layout will reload on next visit.
+            Dashboard configuration saved successfully. Your widgets and layout
+            will reload on next visit.
             <button
-              onClick={() => navigate("/", { state: { viewId: "default" } })}
-              style={{ marginLeft: "auto", padding: "5px 14px", background: "#10b981", color: "#fff", border: "none", borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer" }}
+              onClick={() => router.push("/?viewId=default")}
+              style={{
+                marginLeft: "auto",
+                padding: "5px 14px",
+                background: "#10b981",
+                color: "#fff",
+                border: "none",
+                borderRadius: 7,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
             >
               View Dashboard
             </button>
             <button
               onClick={() => setSavedBanner(false)}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "#065f46", fontSize: 16, lineHeight: 1 }}
-            >×</button>
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: "#065f46",
+                fontSize: 16,
+                lineHeight: 1,
+              }}
+            >
+              ×
+            </button>
           </div>
         )}
 
@@ -1123,7 +1168,7 @@ export default function Mydashboard() {
           <div style={{ marginLeft: "auto" }}>
             <button
               onClick={() => {
-                navigate("/", { state: { viewId: "default" } });
+                router.push("/?viewId=default");
               }}
               style={{
                 display: "flex",
@@ -1201,7 +1246,7 @@ export default function Mydashboard() {
               </div>
               <button
                 onClick={() => {
-                  navigate("/", { state: { viewId: "default" } });
+                  router.push("/?viewId=default");
                 }}
                 style={{
                   marginTop: 8,
@@ -1229,7 +1274,7 @@ export default function Mydashboard() {
               {/* Create new card */}
               <div
                 onClick={() => {
-                  navigate("/", { state: { viewId: "default" } });
+                  router.push("/?viewId=default");
                 }}
                 style={{
                   border: `2px dashed ${T.border}`,

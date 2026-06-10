@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from "react-router-dom";
+"use client";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   LogOut,
@@ -7,7 +8,6 @@ import {
   RefreshCw,
   Moon,
   Sun,
-  Settings,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -36,8 +36,6 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
 const resolvePageTitle = (pathname: string) => {
-  /* DASHBOARD */
-
   if (
     pathname === "/" ||
     pathname === "/dashboard" ||
@@ -46,13 +44,9 @@ const resolvePageTitle = (pathname: string) => {
     return "Dashboard";
   }
 
-  /* RESOURCES */
-
   if (pathname.startsWith("/resources")) {
     return "Resource Information";
   }
-
-  /* DEMAND & ALLOCATION */
 
   if (
     pathname.startsWith("/demand") ||
@@ -62,37 +56,28 @@ const resolvePageTitle = (pathname: string) => {
     return "Demand & Allocation";
   }
 
-  /* PROJECTS */
-
   if (pathname.startsWith("/projects") || pathname.startsWith("/task-review")) {
     return "Projects";
   }
 
-  /* Porfolio planning*/
-
-  if (pathname.startsWith("/project-portfolio") || pathname.startsWith("/scenario-planning")) {
+  if (
+    pathname.startsWith("/project-portfolio") ||
+    pathname.startsWith("/scenario-planning")
+  ) {
     return "Portfolio Planning";
   }
-
-  /* REPORTING */
 
   if (pathname.startsWith("/reports")) {
     return "Reporting & Analytics";
   }
 
-  /* USER MANAGEMENT */
-
   if (pathname.startsWith("/user-management")) {
     return "User Management";
   }
 
-  /* PROFILE */
-
   if (pathname.startsWith("/profile")) {
     return "My Profile";
   }
-
-  /* MY ALLOCATIONS */
 
   if (pathname.startsWith("/my-allocations")) {
     return "My Allocations";
@@ -113,25 +98,19 @@ const resolvePageTitle = (pathname: string) => {
   return "Enterprise Resource Management";
 };
 
-const initials = (n: string) =>
-  n
-    .split(" ")
-    .map((p) => p[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
 function LayoutContent({ children }: { children: React.ReactNode }) {
-  const location = useLocation();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const navigate = useNavigate();
-
-  const title = resolvePageTitle(location.pathname);
+  const title = resolvePageTitle(pathname);
 
   const { user, logout } = useAuth();
 
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") === "dark";
+    }
+    return false;
   });
 
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -139,29 +118,22 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
-
       localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-
       localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
 
   const handleRefresh = () => {
     setLastUpdated(new Date());
-
     window.location.reload();
   };
 
   const handleLogout = () => {
     logout();
-
     toast.success("Logged out successfully");
-
-    navigate("/login", {
-      replace: true,
-    });
+    router.replace("/login");
   };
 
   const formatLastUpdated = (date: Date) => {
@@ -338,7 +310,6 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.preventDefault();
-
                     setDarkMode((prev) => !prev);
                   }}
                   className="cursor-pointer"
@@ -356,14 +327,16 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
                 {/* PROFILE */}
 
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <UserIcon className="mr-2 h-4 w-4" />
                   My Profile
                 </DropdownMenuItem>
 
                 {/* ALLOCATIONS */}
 
-                <DropdownMenuItem onClick={() => navigate("/my-allocations")}>
+                <DropdownMenuItem
+                  onClick={() => router.push("/my-allocations")}
+                >
                   <ListChecks className="mr-2 h-4 w-4" />
                   My Allocations
                 </DropdownMenuItem>

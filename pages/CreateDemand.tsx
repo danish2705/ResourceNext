@@ -1,5 +1,6 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import { useActiveValues } from "@/store/useMasterData";
 import type { Demand } from "@/store/useStore";
@@ -1040,8 +1041,8 @@ function BulkStatusBar({ formStatuses }: { formStatuses: FormStatus[] }) {
 // ── CreateDemand (default export) ─────────────────────────────────────────────
 
 export default function CreateDemand() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const editId = searchParams.get("id");
 
   const { demands, addDemand, updateDemand } = useStore();
@@ -1240,7 +1241,7 @@ export default function CreateDemand() {
         duration: 4000,
       });
       setIsSavingDraft(false);
-      navigate("/demand");
+      router.push("/demand");
       return;
     }
 
@@ -1278,7 +1279,7 @@ export default function CreateDemand() {
       },
     );
     setIsSavingDraft(false);
-    navigate("/demand");
+    router.push("/demand");
   };
 
   // ── Bulk: Submit remaining pending ───────────────────────────────────────────
@@ -1294,7 +1295,7 @@ export default function CreateDemand() {
         duration: 5000,
       });
       setIsSubmitting(false);
-      navigate("/demand");
+      router.push("/demand");
       return;
     }
 
@@ -1341,9 +1342,9 @@ export default function CreateDemand() {
     // Navigate with the first new demand's ID so DemandSummary can auto-open allocation.
     // For bulk (>1), just navigate without auto-open since there are multiple new demands.
     if (newIds.length === 1 && newIds[0]) {
-      navigate(`/demand?allocate=${newIds[0]}`);
+      router.push(`/demand?allocate=${newIds[0]}`);
     } else {
-      navigate("/demand");
+      router.push("/demand");
     }
   };
 
@@ -1540,7 +1541,7 @@ export default function CreateDemand() {
           <div className="flex gap-3 flex-wrap">
             <Button
               variant="outline"
-              onClick={() => navigate("/demand")}
+              onClick={() => router.push("/demand")}
               disabled={isBusy}
             >
               Cancel

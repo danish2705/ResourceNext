@@ -1,5 +1,6 @@
+"use client";
 import { useState, useRef, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import { useActiveValues } from "@/store/useMasterData";
 
@@ -1052,12 +1053,12 @@ function CreateDemandDialog({
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function ProjectPortfolio() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { portfolioProjects, addDemands, demands } = useStore();
   const masterPortfolios = useActiveValues("portfolios");
 
-  const sendForApproval = location.state?.sendForApproval ?? false;
+  const sendForApproval = searchParams.get("sendForApproval") === "true";
   const [viewRow, setViewRow] = useState<PortfolioRow | null>(null);
   const [showDemandDialog, setShowDemandDialog] = useState(false);
   const [filters, setFilters] = useState<FilterState>(defaultFilters());
@@ -1273,12 +1274,9 @@ export default function ProjectPortfolio() {
       forecast: { current: 0, y2027: 0, y2028: 0, y2029: 0, y2030: 0 },
     }));
     addDemands(newDemands);
-    navigate("/demand", {
-      state: {
-        fromPortfolio: true,
-        projectNames: selected.map((r) => r.project),
-      },
-    });
+    router.push(
+      `/demand?fromPortfolio=1&projectNames=${encodeURIComponent(selected.map((r) => r.project).join(","))}`,
+    );
   };
 
   // KPI values based on ALL rows (unfiltered)
@@ -1575,10 +1573,10 @@ export default function ProjectPortfolio() {
 
       {/* Table */}
       <Card>
-  <CardContent className="p-0">
-    <div className="border rounded-md max-h-[500px] overflow-auto">
-      <Table className="min-w-[1400px]">
-        <TableHeader className="sticky top-0 z-10 bg-background">
+        <CardContent className="p-0">
+          <div className="border rounded-md max-h-[500px] overflow-auto">
+            <Table className="min-w-[1400px]">
+              <TableHeader className="sticky top-0 z-10 bg-background">
                 <TableRow className="bg-muted/40">
                   <TableHead className="w-[90px]">Project ID</TableHead>
                   <TableHead className="w-[180px]">Project</TableHead>
@@ -1601,7 +1599,7 @@ export default function ProjectPortfolio() {
                   )}
                 </TableRow>
               </TableHeader>
-             
+
               <TableBody>
                 {filteredRows.length === 0 ? (
                   <TableRow>
