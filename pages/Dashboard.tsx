@@ -1,9 +1,8 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   BarChart,
   Bar,
-  LineChart,
   Line,
   AreaChart,
   Area,
@@ -1910,7 +1909,7 @@ function renderSAWidget(
               icon={Database}
               label="Import Data"
               color={T.orange}
-              onClick={() => router.push("/resources")}
+              onClick={() => router.push("/resources-information")}
             />
             <QuickActionBtn
               icon={FileText}
@@ -2217,7 +2216,7 @@ function renderPMOWidget(
               icon={Plus}
               label="Create/Import Demand"
               color={T.blue}
-              onClick={() => router.push("/demand/create")}
+              onClick={() => router.push("/demand-summary/create-demand")}
             />
             <QuickActionBtn
               icon={CheckCircle}
@@ -2229,13 +2228,13 @@ function renderPMOWidget(
               icon={BarChart2}
               label="Demand Summary"
               color={T.purple}
-              onClick={() => router.push("/demand")}
+              onClick={() => router.push("/demand-summary")}
             />
             <QuickActionBtn
               icon={Target}
               label="Capacity Plan"
               color={T.teal}
-              onClick={() => router.push("/scenario-plannig")}
+              onClick={() => router.push("/scenario-planning")}
             />
             <QuickActionBtn
               icon={Search}
@@ -2654,7 +2653,7 @@ function renderRMWidget(
               icon={UserCheck}
               label="Assign Resource"
               color={T.blue}
-              onClick={() => router.push("/demand")}
+              onClick={() => router.push("/demand-summary")}
             />
             <QuickActionBtn
               icon={CheckCircle}
@@ -3080,7 +3079,7 @@ function renderMyWidget(id: string, navigate: (path: string) => void) {
               icon={Briefcase}
               label="View Assignments"
               color={T.purple}
-              onClick={() => router.push("/allocation")}
+              onClick={() => router.push("/resource-allocation")}
             />
           </div>
         </CardShell>
@@ -3397,6 +3396,13 @@ function RoleDashboard({ role }: { role: Role }) {
 
   // Note: auto-select from navigation state removed in Next.js migration.
   // To select a view, pass ?viewId=... as a URL search param instead.
+const searchParams = useSearchParams();
+useEffect(() => {
+  const viewId = searchParams.get("viewId");
+  if (!viewId) return;
+  const timer = setTimeout(() => handleSelectView(viewId), 0);
+  return () => clearTimeout(timer);
+}, [searchParams]);
 
   // ─── Switch view ──────────────────────────────────────────────────────────
   function handleSelectView(id: string) {

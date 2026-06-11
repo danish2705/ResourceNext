@@ -40,6 +40,7 @@ import type {
   AuditEntry,
   WorklistItem,
 } from "@/types";
+import { TaskRequest } from "@/mocks/taskApproval";
 
 // ─── Store Interface ──────────────────────────────────────────────────────────
 
@@ -108,7 +109,6 @@ interface AppState {
   reviewRequests: ReviewRequest[];
   selectedProject: string;
   powerBiUrl: string;
-
   addDemand: (
     d: Omit<
       Demand,
@@ -155,6 +155,9 @@ interface AppState {
   convertForecastToDemand: (id: string) => void;
   addReviewRequest: (req: ReviewRequest) => void;
   updateReviewRequest: (id: string, updates: Partial<ReviewRequest>) => void;
+  submittedTasksForReview: TaskRequest[];
+  setSubmittedTasksForReview: (tasks: TaskRequest[]) => void;
+  clearSubmittedTasksForReview: () => void;
 }
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -841,17 +844,21 @@ export const useStore = create<AppState>()(
             r.id === id ? { ...r, ...updates } : r,
           ),
         })),
+      submittedTasksForReview: [],
+      setSubmittedTasksForReview: (tasks) =>
+        set({ submittedTasksForReview: tasks }),
+      clearSubmittedTasksForReview: () => set({ submittedTasksForReview: [] }),
     }),
     {
       name: "app-storage",
-      version: 3,
+      version: 4,
       migrate: (persisted: any, fromVersion: number) => {
         // v1 → v2: replace old mock reviewRequests with updated seed data
         if (fromVersion < 2) {
           persisted = { ...persisted, reviewRequests: mockReviewRequests };
         }
         // v2 → v3: add portfolioProjects field
-        if (fromVersion < 3) {
+        if (fromVersion < 4) {
           persisted = { ...persisted, portfolioProjects: [] };
         }
         return persisted;

@@ -23,6 +23,7 @@ import {
   projectData,
   PROGRESS_RANGES,
 } from "@/mocks/projects";
+import { useStore } from "zustand";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -993,6 +994,7 @@ export default function Projects() {
     showToast("Tasks submitted for approval");
 
     // Navigate to TaskReviewApproval page
+    useStore.getState().setSubmittedTasksForReview(submittedTasksList);
     router.push("/task-review-approval");
   };
 

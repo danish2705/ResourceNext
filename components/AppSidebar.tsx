@@ -10,7 +10,6 @@ import {
   BarChart3,
   ChevronDown,
   ListChecks,
-  PlusCircle,
   TrendingUp,
   ShieldCheck,
   ScrollText,
@@ -88,7 +87,7 @@ const dashboardSubItems: NavItem[] = [
 const mainItems: NavItem[] = [
   {
     title: "Resource Information",
-    url: "/resources",
+    url: "/resources-information",
     icon: UserCircle,
     permission: "view_resource_info",
   },
@@ -97,7 +96,7 @@ const mainItems: NavItem[] = [
 const demandSubItems: NavItem[] = [
   {
     title: "Demand Summary & Allocation",
-    url: "/demand",
+    url: "/demand-summary",
     icon: ListChecks,
     end: true,
     permission: "view_dashboard",
@@ -119,7 +118,7 @@ const demandSubItems: NavItem[] = [
 const allocationItems: NavItem[] = [
   {
     title: "Allocation Details",
-    url: "/allocation",
+    url: "/resource-allocation",
     icon: Users,
     permission: "view_allocation",
   },
@@ -166,13 +165,13 @@ const adminSubItems: NavItem[] = [
   },
   {
     title: "Master Data Management",
-    url: "/admin/master-data",
+    url: "/master-data",
     icon: Database,
     permission: "manage_master_data",
   },
   {
     title: "Configuration",
-    url: "/admin/configuration",
+    url: "/configuration",
     icon: Settings,
     permission: "manage_master_data",
   },
@@ -181,7 +180,7 @@ const adminSubItems: NavItem[] = [
 const lowerItems: NavItem[] = [
   {
     title: "Reporting & Analytics",
-    url: "/reports",
+    url: "/reporting-dashboard",
     icon: BarChart3,
     permission: "view_reporting",
   },
@@ -221,7 +220,7 @@ export function AppSidebar() {
   const canSeeDemand = can("view_demand");
 
   const demandActive =
-    pathname.startsWith("/demand") || pathname.startsWith("/demand-status");
+    pathname.startsWith("/demand-summary") || pathname.startsWith("/demand-status");
 
   const [demandOpen, setDemandOpen] = useState(demandActive);
 
@@ -243,7 +242,9 @@ export function AppSidebar() {
   const [dashboardOpen, setDashboardOpen] = useState(dashboardActive);
 
   const adminActive =
-    pathname.startsWith("/user-management") || pathname.startsWith("/admin/");
+    pathname.startsWith("/user-management") ||
+    pathname.startsWith("/master-data") ||
+    pathname.startsWith("/configuration");
 
   const [adminOpen, setAdminOpen] = useState(adminActive);
 

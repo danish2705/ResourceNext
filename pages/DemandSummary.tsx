@@ -559,7 +559,7 @@ export default function DemandSummary() {
             variant="ghost"
             size="sm"
             className="h-7 w-7 p-0"
-            onClick={() => router.push(`/demand/create?id=${row.id}`)}
+            onClick={() => router.push(`/demand-summary/create?id=${row.id}`)}
             title={canEditDelete ? "Edit" : "You don't have permission to edit"}
             disabled={!canEditDelete}
           >
@@ -601,7 +601,7 @@ export default function DemandSummary() {
             <Button
               size="sm"
               className="h-9 gap-1.5"
-              onClick={() => router.push("/demand/create")}
+              onClick={() => router.push("/demand-sumary/create=demand")}
             >
               <Plus className="h-3.5 w-3.5" />
               New Demand

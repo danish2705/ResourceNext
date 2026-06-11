@@ -1241,7 +1241,7 @@ export default function CreateDemand() {
         duration: 4000,
       });
       setIsSavingDraft(false);
-      router.push("/demand");
+      router.push("/demand-summary");
       return;
     }
 
@@ -1342,9 +1342,9 @@ export default function CreateDemand() {
     // Navigate with the first new demand's ID so DemandSummary can auto-open allocation.
     // For bulk (>1), just navigate without auto-open since there are multiple new demands.
     if (newIds.length === 1 && newIds[0]) {
-      router.push(`/demand?allocate=${newIds[0]}`);
+      router.push(`/demand-summary?allocate=${newIds[0]}`);
     } else {
-      router.push("/demand");
+      router.push("/demand-summary");
     }
   };
 

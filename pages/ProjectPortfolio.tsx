@@ -1275,7 +1275,7 @@ export default function ProjectPortfolio() {
     }));
     addDemands(newDemands);
     router.push(
-      `/demand?fromPortfolio=1&projectNames=${encodeURIComponent(selected.map((r) => r.project).join(","))}`,
+      `/demand-summary?fromPortfolio=1&projectNames=${encodeURIComponent(selected.map((r) => r.project).join(","))}`,
     );
   };
 

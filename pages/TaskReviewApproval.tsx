@@ -429,7 +429,14 @@ export default function TaskReviewApproval() {
   const router = useRouter();
 
   const initialTasks: TaskRequest[] = useMemo(() => {
-    const stateTasks: TaskRequest[] = []; // Note: In Next.js, pass submitted tasks via Zustand store instead of router state
+const { submittedTasksForReview, clearSubmittedTasksForReview } = useStore();
+// ...
+useEffect(() => {
+  if (submittedTasksForReview.length > 0) {
+    setTasks((prev) => [...submittedTasksForReview, ...prev]);
+    clearSubmittedTasksForReview();
+  }
+}, []);
     return [...stateTasks, ...MOCK_TASKS];
   }, []);
 

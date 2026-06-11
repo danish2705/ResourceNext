@@ -36,65 +36,36 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
 const resolvePageTitle = (pathname: string) => {
-  if (
-    pathname === "/" ||
-    pathname === "/dashboard" ||
-    pathname === "/mydashboard"
-  ) {
-    return "Dashboard";
-  }
-
-  if (pathname.startsWith("/resources")) {
+  if (pathname === "/" || pathname === "/dashboard") return "Dashboard";
+  if (pathname.startsWith("/my-dashboard")) return "Dashboard";
+  if (pathname.startsWith("/resource-information"))
     return "Resource Information";
-  }
-
   if (
-    pathname.startsWith("/demand") ||
-    pathname.startsWith("/create-demand") ||
+    pathname.startsWith("/demand-summary") ||
     pathname.startsWith("/resource-review")
-  ) {
+  )
     return "Demand & Allocation";
-  }
-
-  if (pathname.startsWith("/projects") || pathname.startsWith("/task-review")) {
+  if (pathname.startsWith("/demand-status")) return "Demand Status";
+  if (pathname.startsWith("/projects") || pathname.startsWith("/task-review"))
     return "Projects";
-  }
-
   if (
     pathname.startsWith("/project-portfolio") ||
     pathname.startsWith("/scenario-planning")
-  ) {
+  )
     return "Portfolio Planning";
-  }
-
-  if (pathname.startsWith("/reports")) {
+  if (pathname.startsWith("/reporting-dashboard"))
     return "Reporting & Analytics";
-  }
-
-  if (pathname.startsWith("/user-management")) {
-    return "User Management";
-  }
-
-  if (pathname.startsWith("/profile")) {
-    return "My Profile";
-  }
-
-  if (pathname.startsWith("/my-allocations")) {
-    return "My Allocations";
-  }
-
-  if (pathname.startsWith("/allocation")) {
-    return "Allocation Details";
-  }
-
-  if (pathname.startsWith("/audit-log")) {
-    return "Audit Log";
-  }
-
-  if (pathname.startsWith("/training")) {
-    return "Training";
-  }
-
+  if (pathname.startsWith("/resource-allocation")) return "Allocation Details";
+  if (pathname.startsWith("/user-management")) return "User Management";
+  if (
+    pathname.startsWith("/master-data") ||
+    pathname.startsWith("/configuration")
+  )
+    return "Admin";
+  if (pathname.startsWith("/audit-log")) return "Audit Log";
+  if (pathname.startsWith("/training")) return "Training";
+  if (pathname.startsWith("/profile")) return "My Profile";
+  if (pathname.startsWith("/my-allocations")) return "My Allocations";
   return "Enterprise Resource Management";
 };
 
