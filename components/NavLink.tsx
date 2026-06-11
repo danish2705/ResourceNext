@@ -1,22 +1,20 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { forwardRef } from "react";
+import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
 
-interface NavLinkProps {
-  href: string;
-  className?: string;
+interface NavLinkProps extends ComponentPropsWithoutRef<typeof Link> {
   activeClassName?: string;
   end?: boolean;
-  children?: React.ReactNode;
-  [key: string]: unknown;
 }
 
 const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
   ({ href, className, activeClassName, end, children, ...props }, ref) => {
     const pathname = usePathname();
-    const isActive = end ? pathname === href : pathname.startsWith(href);
+    const isActive = end
+      ? pathname === href
+      : pathname.startsWith(String(href));
 
     return (
       <Link

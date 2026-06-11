@@ -1897,25 +1897,25 @@ function renderSAWidget(
               icon={UserCheck}
               label="Create User"
               color={T.blue}
-              onClick={() => router.push("/user-management")}
+              onClick={() => navigate("/user-management")}
             />
             <QuickActionBtn
               icon={Shield}
               label="Manage Roles"
               color={T.green}
-              onClick={() => router.push("/user-management")}
+              onClick={() => navigate("/user-management")}
             />
             <QuickActionBtn
               icon={Database}
               label="Import Data"
               color={T.orange}
-              onClick={() => router.push("/resources-information")}
+              onClick={() => navigate("/resources-information")}
             />
             <QuickActionBtn
               icon={FileText}
               label="View Audit Logs"
               color={T.gray}
-              onClick={() => router.push("/audit-log")}
+              onClick={() => navigate("/audit-log")}
             />
           </div>
         </CardShell>
@@ -2216,31 +2216,31 @@ function renderPMOWidget(
               icon={Plus}
               label="Create/Import Demand"
               color={T.blue}
-              onClick={() => router.push("/demand-summary/create-demand")}
+              onClick={() => navigate("/demand-summary/create-demand")}
             />
             <QuickActionBtn
               icon={CheckCircle}
               label="Allocation Review & Approval"
               color={T.green}
-              onClick={() => router.push("/resource-review")}
+              onClick={() => navigate("/resource-review")}
             />
             <QuickActionBtn
               icon={BarChart2}
               label="Demand Summary"
               color={T.purple}
-              onClick={() => router.push("/demand-summary")}
+              onClick={() => navigate("/demand-summary")}
             />
             <QuickActionBtn
               icon={Target}
               label="Capacity Plan"
               color={T.teal}
-              onClick={() => router.push("/scenario-planning")}
+              onClick={() => navigate("/scenario-planning")}
             />
             <QuickActionBtn
               icon={Search}
               label="Resource Search"
               color={T.gray}
-              onClick={() => router.push("/resources")}
+              onClick={() => navigate("/resources")}
             />
           </div>
         </CardShell>
@@ -2653,25 +2653,25 @@ function renderRMWidget(
               icon={UserCheck}
               label="Assign Resource"
               color={T.blue}
-              onClick={() => router.push("/demand-summary")}
+              onClick={() => navigate("/demand-summary")}
             />
             <QuickActionBtn
               icon={CheckCircle}
               label="Allocation Review & Approval"
               color={T.green}
-              onClick={() => router.push("/resource-review")}
+              onClick={() => navigate("/resource-review")}
             />
             <QuickActionBtn
               icon={Search}
               label="Resource Search"
               color={T.green}
-              onClick={() => router.push("/resources")}
+              onClick={() => navigate("/resources")}
             />
             <QuickActionBtn
               icon={UserX}
               label="View Bench"
               color={T.amber}
-              onClick={() => router.push("/resources")}
+              onClick={() => navigate("/resources")}
             />
           </div>
         </CardShell>
@@ -3067,19 +3067,19 @@ function renderMyWidget(id: string, navigate: (path: string) => void) {
               icon={Users}
               label="Update Profile"
               color={T.blue}
-              onClick={() => router.push("/resources")}
+              onClick={() => navigate("/resources")}
             />
             <QuickActionBtn
               icon={Star}
               label="Update Skills"
               color={T.teal}
-              onClick={() => router.push("/resources")}
+              onClick={() => navigate("/resources")}
             />
             <QuickActionBtn
               icon={Briefcase}
               label="View Assignments"
               color={T.purple}
-              onClick={() => router.push("/resource-allocation")}
+              onClick={() => navigate("/resource-allocation")}
             />
           </div>
         </CardShell>
@@ -3394,15 +3394,7 @@ function RoleDashboard({ role }: { role: Role }) {
     refreshSavedViews();
   }, [user?.id, persona]);
 
-  // Note: auto-select from navigation state removed in Next.js migration.
-  // To select a view, pass ?viewId=... as a URL search param instead.
-const searchParams = useSearchParams();
-useEffect(() => {
-  const viewId = searchParams.get("viewId");
-  if (!viewId) return;
-  const timer = setTimeout(() => handleSelectView(viewId), 0);
-  return () => clearTimeout(timer);
-}, [searchParams]);
+  const searchParams = useSearchParams();
 
   // ─── Switch view ──────────────────────────────────────────────────────────
   function handleSelectView(id: string) {
@@ -3451,6 +3443,16 @@ useEffect(() => {
     setActiveViewName(dash.name);
     setShowCustomize(false);
   }
+
+  // Auto-select view from ?viewId= search param (Next.js migration replacement
+  // for React Router navigation state).
+  useEffect(() => {
+    const viewId = searchParams.get("viewId");
+    if (!viewId) return;
+    const timer = setTimeout(() => handleSelectView(viewId), 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Build kpiCards with labels for sidebar
   const kpiWithLabels = kpiCards.map((k) => {

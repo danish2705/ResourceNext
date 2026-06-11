@@ -1,11 +1,5 @@
-"use client";
-import PermissionGate from "@/components/PermissionGate";
-import Dashboard from "@/pages/Dashboard";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
-  return (
-    <PermissionGate permission="view_dashboard">
-      <Dashboard />
-    </PermissionGate>
-  );
+export default function RootPage() {
+  redirect("/dashboard");
 }

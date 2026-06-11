@@ -145,9 +145,6 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           min-w-0
           flex-col
           overflow-hidden
-          transition-all
-          duration-200
-          ease-out
         "
       >
         {/* TOP HEADER */}

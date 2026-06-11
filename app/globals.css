@@ -1,45 +1,71 @@
 @import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-background: hsl(210 20% 98%);
+  --color-foreground: hsl(210 30% 15%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(210 30% 15%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(210 30% 15%);
+
+  --color-primary: hsl(195 80% 30%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(195 30% 94%);
+  --color-secondary-foreground: hsl(195 80% 25%);
+
+  --color-muted: hsl(210 20% 96%);
+  --color-muted-foreground: hsl(210 15% 50%);
+
+  --color-accent: hsl(195 60% 92%);
+  --color-accent-foreground: hsl(195 80% 25%);
+
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(210 20% 90%);
+  --color-input: hsl(210 20% 90%);
+  --color-ring: hsl(195 80% 30%);
+
+  --color-sidebar-background: hsl(0 0% 98%);
+  --color-sidebar-foreground: hsl(240 5.3% 26.1%);
+  --color-sidebar-primary: hsl(240 5.9% 10%);
+  --color-sidebar-primary-foreground: hsl(0 0% 98%);
+  --color-sidebar-accent: hsl(240 4.8% 95.9%);
+  --color-sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --color-sidebar-border: hsl(220 13% 91%);
+  --color-sidebar-ring: hsl(217.2 91.2% 59.8%);
+
+  --radius: 0.5rem;
+}
 
 @layer base {
   :root {
     --background: 210 20% 98%;
     --foreground: 210 30% 15%;
-
     --card: 0 0% 100%;
     --card-foreground: 210 30% 15%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 210 30% 15%;
-
     --primary: 195 80% 30%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 195 30% 94%;
     --secondary-foreground: 195 80% 25%;
-
     --muted: 210 20% 96%;
     --muted-foreground: 210 15% 50%;
-
     --accent: 195 60% 92%;
     --accent-foreground: 195 80% 25%;
-
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
-
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    /* KPI widget tints */
     --kpi-blue: 210 90% 54%;
     --kpi-blue-bg: 210 100% 96%;
     --kpi-orange: 25 95% 53%;
@@ -49,7 +75,6 @@
     --kpi-purple: 270 70% 55%;
     --kpi-purple-bg: 270 80% 96%;
 
-    /* Pillar palette */
     --pillar-1: 195 80% 35%;
     --pillar-2: 25 90% 50%;
     --pillar-3: 270 65% 55%;
@@ -59,7 +84,6 @@
     --border: 210 20% 90%;
     --input: 210 20% 90%;
     --ring: 195 80% 30%;
-
     --radius: 0.5rem;
 
     --nav-bg: 195 80% 22%;
@@ -79,36 +103,26 @@
   .dark {
     --background: 210 30% 8%;
     --foreground: 210 20% 95%;
-
     --card: 210 30% 12%;
     --card-foreground: 210 20% 95%;
-
     --popover: 210 30% 12%;
     --popover-foreground: 210 20% 95%;
-
     --primary: 195 80% 45%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 210 30% 18%;
     --secondary-foreground: 210 20% 90%;
-
     --muted: 210 25% 18%;
     --muted-foreground: 210 15% 60%;
-
     --accent: 210 30% 20%;
     --accent-foreground: 210 20% 90%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 210 25% 20%;
     --input: 210 25% 20%;
     --ring: 195 80% 45%;
-
     --nav-bg: 210 30% 10%;
     --nav-foreground: 0 0% 95%;
     --nav-active: 195 80% 45%;
-
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -122,39 +136,37 @@
 
 @layer base {
   * {
-    @apply border-border;
-
+    border-color: hsl(var(--border));
     box-sizing: border-box;
   }
 
   html {
+    height: 100%;
+    overflow: hidden;
     scroll-behavior: smooth;
-
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
     text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-background text-foreground;
-
+    height: 100%;
     overflow: hidden;
-
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     -webkit-tap-highlight-color: transparent;
-
     backface-visibility: hidden;
     transform: translateZ(0);
-
     will-change: auto;
+    isolation: isolate;
   }
 
+  /* Next.js app dir mounts into the body directly - constrain all wrappers */
+  #__next,
   #root {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     overflow: hidden;
-
-    isolation: isolate;
   }
 
   button,
@@ -185,18 +197,15 @@
   }
 }
 
-/* GLOBAL SMOOTHNESS */
-
 @layer utilities {
   .gpu-render {
     transform: translateZ(0);
     backface-visibility: hidden;
-    perspective: 1000;
+    perspective: 1000px;
   }
 
   .smooth-transition {
-    transition:
-      all 150ms ease-out;
+    transition: all 150ms ease-out;
   }
 
   .smooth-width {
@@ -207,7 +216,6 @@
   }
 
   .smooth-transform {
-    transition:
-      transform 150ms ease-out;
+    transition: transform 150ms ease-out;
   }
 }

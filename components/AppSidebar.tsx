@@ -70,7 +70,7 @@ interface NavItem {
 const dashboardSubItems: NavItem[] = [
   {
     title: "Default Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: LayoutDashboard,
     end: true,
     permission: "view_dashboard",
@@ -220,7 +220,8 @@ export function AppSidebar() {
   const canSeeDemand = can("view_demand");
 
   const demandActive =
-    pathname.startsWith("/demand-summary") || pathname.startsWith("/demand-status");
+    pathname.startsWith("/demand-summary") ||
+    pathname.startsWith("/demand-status");
 
   const [demandOpen, setDemandOpen] = useState(demandActive);
 

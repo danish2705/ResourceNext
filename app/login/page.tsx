@@ -50,7 +50,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result.success) {
-      router.replace("/");
+      router.replace("/dashboard");
     } else {
       setError(result.error ?? "Login failed.");
     }
@@ -67,7 +67,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result.success) {
-      router.replace("/");
+      router.replace("/dashboard");
     } else {
       setError("SSO login failed.");
     }

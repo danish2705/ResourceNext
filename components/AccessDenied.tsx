@@ -13,7 +13,7 @@ export default function AccessDenied() {
       <div>
         <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          You don't have permission to view this page.
+          You dont have permission to view this page.
         </p>
       </div>
       <Button variant="outline" onClick={() => router.push("/")}>
