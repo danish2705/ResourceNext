@@ -87,7 +87,7 @@ const dashboardSubItems: NavItem[] = [
 const mainItems: NavItem[] = [
   {
     title: "Resource Information",
-    url: "/resources-information",
+    url: "/resource-information",
     icon: UserCircle,
     permission: "view_resource_info",
   },

@@ -30,6 +30,7 @@
   --color-ring: hsl(195 80% 30%);
 
   --color-sidebar-background: hsl(0 0% 98%);
+   --color-sidebar: hsl(0 0% 98%); 
   --color-sidebar-foreground: hsl(240 5.3% 26.1%);
   --color-sidebar-primary: hsl(240 5.9% 10%);
   --color-sidebar-primary-foreground: hsl(0 0% 98%);
@@ -130,6 +131,7 @@
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
+   --color-sidebar: hsl(240 5.9% 10%);
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }

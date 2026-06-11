@@ -209,7 +209,7 @@ const Sidebar = React.forwardRef<
             `
               flex
               h-full
-              w-[--sidebar-width]
+              w-(--sidebar-width)
               flex-col
               bg-sidebar
               text-sidebar-foreground
@@ -233,7 +233,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             side={side}
             className="
-                w-[--sidebar-width]
+                w-(--sidebar-width)
                 bg-sidebar
                 p-0
                 text-sidebar-foreground
@@ -279,7 +279,7 @@ const Sidebar = React.forwardRef<
             `
               relative
               h-svh
-              w-[--sidebar-width]
+              w-(--sidebar-width)
               bg-transparent
               transition-all
               duration-150
@@ -290,7 +290,7 @@ const Sidebar = React.forwardRef<
 
             variant === "floating" || variant === "inset"
               ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+              : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
           )}
         />
 
@@ -304,7 +304,7 @@ const Sidebar = React.forwardRef<
               z-10
               hidden
               h-svh
-              w-[--sidebar-width]
+              w-(--sidebar-width)
               transition-all
               duration-150
               ease-out
@@ -317,7 +317,7 @@ const Sidebar = React.forwardRef<
 
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+              : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
 
             className,
           )}
@@ -810,7 +810,7 @@ const SidebarMenuSkeleton = React.forwardRef<
       {showIcon && <Skeleton className="size-4 rounded-md" />}
 
       <Skeleton
-        className="h-4 max-w-[--skeleton-width] flex-1"
+        className="h-4 max-w-(--skeleton-width) flex-1"
         style={
           {
             "--skeleton-width": width,
