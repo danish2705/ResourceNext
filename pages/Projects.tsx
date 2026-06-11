@@ -1,6 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -1155,12 +1161,9 @@ export default function Projects() {
                           selectedTasks[project.id] ?? [];
 
                         return (
-                          <>
+                          <React.Fragment key={project.id}>
                             {/* Main project row */}
-                            <tr
-                              key={project.id}
-                              className="border-b border-border/50 hover:bg-accent/20 transition-colors"
-                            >
+                            <tr className="border-b border-border/50 hover:bg-accent/20 transition-colors">
                               <td className="p-4 text-sm text-muted-foreground font-medium">
                                 {project.id}
                               </td>
@@ -1288,7 +1291,7 @@ export default function Projects() {
                                 </td>
                               </tr>
                             )}
-                          </>
+                          </React.Fragment>
                         );
                       })
                     )}

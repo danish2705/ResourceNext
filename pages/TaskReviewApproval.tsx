@@ -1,6 +1,6 @@
 "use client";
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useEffect } from "react";
+import {useStore} from "../store/useStore";
 import {
   CheckCircle2,
   XCircle,
@@ -426,21 +426,26 @@ function Toast({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TaskReviewApproval() {
-  const router = useRouter();
+  const { submittedTasksForReview, clearSubmittedTasksForReview } = useStore();
 
   const initialTasks: TaskRequest[] = useMemo(() => {
-const { submittedTasksForReview, clearSubmittedTasksForReview } = useStore();
-// ...
-useEffect(() => {
-  if (submittedTasksForReview.length > 0) {
-    setTasks((prev) => [...submittedTasksForReview, ...prev]);
-    clearSubmittedTasksForReview();
-  }
-}, []);
-    return [...stateTasks, ...MOCK_TASKS];
+    return [...submittedTasksForReview, ...MOCK_TASKS];
   }, []);
 
   const [tasks, setTasks] = useState<TaskRequest[]>(initialTasks);
+
+  useEffect(() => {
+    if (submittedTasksForReview.length > 0) {
+      setTasks((prev) => {
+        const existingIds = new Set(prev.map((t) => t.id));
+        const newTasks = submittedTasksForReview.filter(
+          (t) => !existingIds.has(t.id),
+        );
+        return newTasks.length > 0 ? [...newTasks, ...prev] : prev;
+      });
+      clearSubmittedTasksForReview();
+    }
+  }, []);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"All" | TaskStatus>("All");
   const [viewTask, setViewTask] = useState<TaskRequest | null>(null);
